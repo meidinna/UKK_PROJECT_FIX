@@ -26,6 +26,20 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('siswa') }}" :active="request()->routeIs('siswa')">
+                        {{ __('Siswa') }}
+                    </x-nav-link>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('industri') }}" :active="request()->routeIs('industri')">
+                        {{ __('Industri') }}
+                    </x-nav-link>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('pkl') }}" :active="request()->routeIs('pkl')">
                         {{ __('Data PKL') }}
                     </x-nav-link>
