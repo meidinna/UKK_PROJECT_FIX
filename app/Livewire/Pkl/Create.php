@@ -8,6 +8,7 @@ use App\Models\Pkl;
 use App\Models\Siswa;
 use App\Models\Guru;
 use App\Models\Industri;
+use Illuminate\Support\Facades\DB;
 
 class Create extends Component
 {
@@ -28,7 +29,6 @@ class Create extends Component
         }
     }
 
-    // ✅ METHOD STORE TAMBAHAN
     public function store()
     {
         // Validasi data
@@ -40,19 +40,35 @@ class Create extends Component
             'selesai' => 'required|date|after_or_equal:mulai',
         ]);
 
-        // Simpan ke database
-        Pkl::create([
-            'siswa_id' => $this->siswa_id,
-            'guru_id' => $this->guru_id,
-            'industri_id' => $this->industri_id,
-            'mulai' => $this->mulai,
-            'selesai' => $this->selesai,
-        ]);
+        DB::beginTransaction();
+        
+        try {
+            $siswa = Siswa::findOrFail($this->siswa_id);
 
-        // Reset form dan tampilkan pesan sukses
-        $this->reset(['guru_id', 'industri_id', 'mulai', 'selesai']);
-        session()->flash('success', 'Data PKL berhasil disimpan.');
-        return redirect('/dataPkl');
+            if ($siswa->status_pkl) {
+                DB::rollBack();
+                session()->flash('error', 'Transaksi dibatalkan: Siswa sudah memiliki data PKL.');
+                return redirect('/dataPkl');
+            }
+
+            Pkl::create([
+                'siswa_id' => $this->siswa_id,
+                'guru_id' => $this->guru_id,
+                'industri_id' => $this->industri_id,
+                'mulai' => $this->mulai,
+                'selesai' => $this->selesai,
+            ]);
+
+            DB::commit();
+
+            session()->flash('success', 'Data PKL berhasil ditambahkan!'); 
+            return redirect('/dataPkl');
+
+        } catch (\Exception $e) {
+            DB::rollBack(); 
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan data.');
+            return;
+        }
     }
 
     public function render()

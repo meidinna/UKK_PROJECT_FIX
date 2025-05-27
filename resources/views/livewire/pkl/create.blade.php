@@ -86,18 +86,5 @@
                 Simpan Data
             </button>
         </div>
-
-        {{-- Session Messages (Success/Error) --}}
-        @if (session()->has('success'))
-            <div class="mt-4 p-4 text-base text-green-700 bg-green-100 rounded-lg" role="alert">
-                <span class="font-medium">Success!</span> {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session()->has('error'))
-            <div class="mt-4 p-4 text-base text-red-700 bg-red-100 rounded-lg" role="alert">
-                <span class="font-medium">Error!</span> {{ session('error') }}
-            </div>
-        @endif
     </form>
 </div>

@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class GuruResource extends Resource
 {
@@ -43,8 +44,8 @@ class GuruResource extends Resource
                 Forms\Components\Select::make('gender') //menghasilkan dropdown utk milih data berdasar field gender
                     ->label('Jenis Kelamin')
                     ->options([ // pilihan utk droptownnya
-                        'Laki-Laki' => 'Laki-Laki',
-                        'Perempuan' => 'Perempuan',
+                        'L' => 'Laki-Laki',
+                        'P' => 'Perempuan',
                     ])
                     ->native(false) //nonaktifkan tampilan dropdown bawaan browser
                     ->columnspan(2)
@@ -118,10 +119,16 @@ class GuruResource extends Resource
             ->filters([
                 //
             ])
+            // Tambahkan ini di bagian actions()
             ->actions([
                 \Filament\Tables\Actions\ActionGroup::make([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->before(function ($record) {
+                            // Hapus dulu data yang terkait di tabel pkls
+                            \Illuminate\Support\Facades\DB::table('pkls')->where('guru_id', $record->id)->delete();
+                        }),
                 ]),
             ])
             ->bulkActions([

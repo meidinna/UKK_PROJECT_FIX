@@ -25,7 +25,7 @@ class SiswaResource extends Resource
         return $form	        
             ->schema([
 		        // foto
-		        Forms\Components\FileUpload::make('foto')
+		        Forms\Components\FileUpload::make('gambar')
 					->label('Foto Siswa')
 					->image()
 					->directory('siswa')
@@ -104,7 +104,7 @@ class SiswaResource extends Resource
                 	->search($record->id) + 1),
 
                 // gambar
-                Tables\Columns\ImageColumn::make('foto')
+                Tables\Columns\ImageColumn::make('gambar')
 				    ->label('Foto Siswa')
     				->disk('public')
     				->visibility('public'),

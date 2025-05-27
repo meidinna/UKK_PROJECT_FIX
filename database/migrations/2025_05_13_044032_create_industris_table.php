@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('gambar');
             $table->string('bidang_usaha');
+            $table->string('website');
             $table->string('alamat');
             $table->string('kontak');
             $table->string('email');

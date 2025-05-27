@@ -12,8 +12,7 @@ class Create extends Component
 
     public $gambar, $nama, $bidang_usaha, $alamat, $kontak, $email;
 
-    public function create()
-    {
+    public function create()    {
         $this->validate([
             'gambar' => 'required|image|max:2048',
             'nama' => 'required',

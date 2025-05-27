@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Siswa;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,7 +15,14 @@ Route::middleware([
     'CheckUserRoles:super_admin,siswa',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        // Ambil data siswa pertama atau sesuai user yang login
+        // Untuk demo, ambil siswa pertama. Nanti bisa disesuaikan dengan user yang login
+        $siswa = Siswa::first(); 
+        
+        // Atau kalau mau ambil berdasarkan email yang sama dengan user login:
+        // $siswa = Siswa::where('email', Auth::user()->email)->first();
+        
+        return view('dashboard', compact('siswa'));
     })->name('dashboard');
 
     Route::get('/dataPkl', App\Livewire\Pkl\Index::class)->name('pkl');
@@ -25,4 +33,5 @@ Route::middleware([
     Route::get('/siswa', App\Livewire\Siswa\Index::class)->name('siswa');
     Route::get('/industri', App\Livewire\Industri\Index::class)->name('industri');
     Route::get('/industri/tambah', App\Livewire\Industri\Create::class)->name('industriCreate');
-}); 
+    Route::get('/industri/{id}/edit', App\Livewire\Industri\Edit::class)->name('industriEdit');
+});
